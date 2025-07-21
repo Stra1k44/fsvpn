@@ -1,32 +1,29 @@
 import asyncio
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
 
-# Загружаем переменные окружения из файла .env
+# Загружаем переменные окружения
 load_dotenv()
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 
-# Инициализируем бота и диспетчер событий
+# Инициализируем бота и диспетчер
 bot = Bot(token=TELEGRAM_TOKEN)
 dp = Dispatcher()
 
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
-    """
-    Обработчик команды /start.
-    Приветствует пользователя и объясняет, как начать работу с VPN-ботом.
-    """
-    await message.answer(
-        "Добро пожаловать в VPN-сервис!\n"
-        "Для регистрации пришлите свой номер телефона."
-    )
+    # Ответ пользователю на команду /start
+    await message.answer("Привет! Это VPN-бот. Введите ваш номер телефона.")
 
 async def main():
-    # Запуск бота в асинхронном режиме
+    # Запуск диспетчера в режиме поллинга
     await dp.start_polling(bot)
 
+# Запускаем цикл
 if __name__ == "__main__":
-    # Точка входа — запуск основного цикла асинхронно
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except (KeyboardInterrupt, SystemExit):
+        print("Бот завершён")
